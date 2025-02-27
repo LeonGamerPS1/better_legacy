@@ -1341,15 +1341,13 @@ class PlayState extends MusicBeatState
 		};
 		FlxG.sound.list.add(vocals);
 
-	
-
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 
 		var sustainLayer = PreferencesMenu.getPref('susbehind') == true ? strumLineNotes : notes;
 
 		sustains = new FlxTypedGroup<Sustain>();
-		insert(members.indexOf(sustainLayer),sustains);
+		insert(members.indexOf(sustainLayer), sustains);
 
 		var noteData:Array<SwagSection>;
 
@@ -1920,18 +1918,23 @@ class PlayState extends MusicBeatState
 					}
 					dad.holdTimer = 0;
 					daNote.hitByEnemy = true;
+					if (!daNote.isPixel)
+						strum.cover.visible = true;
 
 					strum.resetAnim = Conductor.stepCrochet * 1.5 / 1000;
 					if (SONG.needsVoices)
 						vocals.volume = 1;
 				}
 
+				if (daNote.wasGoodHit && daNote.mustPress && !daNote.isPixel)
+					strum.cover.visible = true;
 				if (daNote.wasGoodHit
 					&& strum.animation.curAnim.name != "confirm"
 					&& daNote.mustPress
 					&& daNote.sustain != null
 					&& !(_maxTime < Conductor.songPosition))
 				{
+					strum.cover.visible = false;
 					destroyNote(daNote);
 					return;
 				}
@@ -1940,6 +1943,7 @@ class PlayState extends MusicBeatState
 				{
 					if (daNote.sustain != null)
 						strum.playAnim(daNote.mustPress ? "pressed" : "static", true);
+					strum.cover.visible = false;
 					destroyNote(daNote);
 				}
 				if (Conductor.songPosition - daNote.strumTime - daNote.sustainLength > (350 / SONG.speed))

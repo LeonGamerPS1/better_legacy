@@ -16,7 +16,8 @@ class HoldCover extends FlxSprite
 	{
 		super(parent.x, parent.y);
 		var png = 'holdCover${fag[id % fag.length]}';
-		frames = Paths.getSparrowAtlas(png, 'shared');
+		frames = Paths.getSparrowAtlas(png);
+
 		animation.addByPrefix('hold', png, 24, true);
 		animation.play('hold');
 		antialiasing = true;
